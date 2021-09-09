@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public final class TimedMMOItems extends JavaPlugin implements Listener {
     private static final long DAY = 60 * 60 * 24;
@@ -69,10 +70,10 @@ public final class TimedMMOItems extends JavaPlugin implements Listener {
         long hours = seconds / HOUR; seconds = Math.max(0, seconds - hours * HOUR);
         long minutes = seconds / MINUTE; seconds = Math.max(0, seconds - minutes * MINUTE);
         List<String> args = new ArrayList<>();
-        if(days > 0) args.add(String.format("%d ngày", days));
-        if(hours > 0) args.add(String.format("%d giờ", hours));
-        if(minutes > 0) args.add(String.format("%d phút", minutes));
-        if(seconds > 0) args.add(String.format("%d giây", seconds));
+        if(days > 0) args.add(String.format(Objects.requireNonNull(getConfig().getString("unit-format.day", "%d ngày")), days));
+        if(hours > 0) args.add(String.format(Objects.requireNonNull(getConfig().getString("unit-format.hour", "%d giờ")), hours));
+        if(minutes > 0) args.add(String.format(Objects.requireNonNull(getConfig().getString("unit-format.minute", "%d phút")), minutes));
+        if(seconds > 0) args.add(String.format(Objects.requireNonNull(getConfig().getString("unit-format.second", "%d giây")), seconds));
         return String.join(" ", args);
     }
 
