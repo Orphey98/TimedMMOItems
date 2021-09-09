@@ -1,3 +1,4 @@
 expiry-period-format: "&e&l[Thời hạn: %value%]"
 expiry-date-format: "&e&l[HSD: %value%]"
 item-expired: "&c&l[!] Vật phẩm đã hết hạn"
+item-expired-placement: action-bar # action-bar, chat, off

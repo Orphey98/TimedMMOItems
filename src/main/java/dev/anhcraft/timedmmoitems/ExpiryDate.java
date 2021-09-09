@@ -7,6 +7,7 @@ import net.Indyuce.mmoitems.stat.data.DoubleData;
 import net.Indyuce.mmoitems.stat.data.type.StatData;
 import net.Indyuce.mmoitems.stat.type.DoubleStat;
 import net.Indyuce.mmoitems.stat.type.ItemRestriction;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +38,13 @@ public class ExpiryDate extends DoubleStat implements ItemRestriction {
     public boolean canUse(RPGPlayer rpgPlayer, NBTItem nbtItem, boolean b) {
         double v = nbtItem.getDouble(getNBTPath());
         if(v > 0 && v < System.currentTimeMillis()) {
-            rpgPlayer.getPlayer().sendActionBar('&', Objects.requireNonNull(TimedMMOItems.plugin.getConfig().getString("item-expired")));
+            String t = Objects.requireNonNull(TimedMMOItems.plugin.getConfig().getString("item-expired-placement", "action-bar"));
+            String m = Objects.requireNonNull(TimedMMOItems.plugin.getConfig().getString("item-expired"));
+            if(t.equalsIgnoreCase("action-bar")) {
+                rpgPlayer.getPlayer().sendActionBar('&', m);
+            } else if(t.equalsIgnoreCase("chat")) {
+                rpgPlayer.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', m));
+            }
             rpgPlayer.getPlayer().playSound(rpgPlayer.getPlayer().getLocation(), Sound.ITEM_SHIELD_BLOCK, 1, 1);
             return false;
         }
