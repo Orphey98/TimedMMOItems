@@ -80,6 +80,8 @@ public final class TimedMMOItems extends JavaPlugin {
                 }
             }
         }.runTaskTimerAsynchronously(this, 0, 20L * getConfig().getInt("item-check-interval"));
+
+        getServer().dispatchCommand(getServer().getConsoleSender(), "mi reload"); // force reload MMOItems
     }
 
     public static boolean isMMOItem(ItemStack vanilla) {
