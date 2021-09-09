@@ -22,9 +22,8 @@ public class ExpiryPeriod extends DoubleStat {
     public void whenApplied(@NotNull ItemStackBuilder builder, @NotNull StatData statData) {
         double val = ((DoubleData) statData).getValue();
         if (val > 0) {
-            TimedMMOItems plugin = TimedMMOItems.getPlugin(TimedMMOItems.class);
-            String period = plugin.formatDuration((long) val);
-            String format = Objects.requireNonNull(plugin.getConfig().getString("expiry-period-format"));
+            String period = TimedMMOItems.plugin.formatDuration((long) val);
+            String format = Objects.requireNonNull(TimedMMOItems.plugin.getConfig().getString("expiry-period-format"));
             builder.getLore().insert(this.getPath(), format.replace("%value%", period));
             builder.addItemTag(this.getAppliedNBT(statData));
         }

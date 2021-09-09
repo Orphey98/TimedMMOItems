@@ -26,9 +26,8 @@ public class ExpiryDate extends DoubleStat implements ItemRestriction {
     public void whenApplied(@NotNull ItemStackBuilder builder, @NotNull StatData statData) {
         double val = ((DoubleData) statData).getValue();
         if (val > 0) {
-            TimedMMOItems plugin = TimedMMOItems.getPlugin(TimedMMOItems.class);
-            String date = plugin.formatDate((long) val);
-            String format = Objects.requireNonNull(plugin.getConfig().getString("expiry-date-format"));
+            String date = TimedMMOItems.plugin.formatDate((long) val);
+            String format = Objects.requireNonNull(TimedMMOItems.plugin.getConfig().getString("expiry-date-format"));
             builder.getLore().insert(this.getPath(), format.replace("%value%", date));
             builder.addItemTag(this.getAppliedNBT(statData));
         }
@@ -38,7 +37,7 @@ public class ExpiryDate extends DoubleStat implements ItemRestriction {
     public boolean canUse(RPGPlayer rpgPlayer, NBTItem nbtItem, boolean b) {
         double v = nbtItem.getDouble(getNBTPath());
         if(v > 0 && v < System.currentTimeMillis()) {
-            rpgPlayer.getPlayer().sendActionBar('&', Objects.requireNonNull(TimedMMOItems.getPlugin(TimedMMOItems.class).getConfig().getString("item-expired")));
+            rpgPlayer.getPlayer().sendActionBar('&', Objects.requireNonNull(TimedMMOItems.plugin.getConfig().getString("item-expired")));
             rpgPlayer.getPlayer().playSound(rpgPlayer.getPlayer().getLocation(), Sound.ITEM_SHIELD_BLOCK, 1, 1);
             return false;
         }

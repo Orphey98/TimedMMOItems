@@ -23,9 +23,11 @@ public final class TimedMMOItems extends JavaPlugin implements Listener {
     public static final ExpiryPeriod EXPIRY_PERIOD = new ExpiryPeriod();
     public static final ExpiryDate EXPIRY_DATE = new ExpiryDate();
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+    public static TimedMMOItems plugin;
 
     @Override
     public void onEnable() {
+        plugin = this;
         saveDefaultConfig();
         reloadConfig();
 
