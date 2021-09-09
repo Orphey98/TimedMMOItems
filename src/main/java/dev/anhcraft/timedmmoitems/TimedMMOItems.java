@@ -3,21 +3,17 @@ package dev.anhcraft.timedmmoitems;
 import net.Indyuce.mmoitems.MMOItems;
 import net.Indyuce.mmoitems.api.item.mmoitem.LiveMMOItem;
 import net.Indyuce.mmoitems.stat.data.DoubleData;
-import org.bukkit.event.Event;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.ChatColor;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
-public final class TimedMMOItems extends JavaPlugin implements Listener {
+public final class TimedMMOItems extends JavaPlugin {
     private static final long DAY = 60 * 60 * 24;
     private static final long HOUR = 60 * 60;
     private static final long MINUTE = 60;
@@ -35,35 +31,59 @@ public final class TimedMMOItems extends JavaPlugin implements Listener {
         MMOItems.plugin.getStats().register(EXPIRY_PERIOD);
         MMOItems.plugin.getStats().register(EXPIRY_DATE);
 
-        getServer().getPluginManager().registerEvents(this, this);
-    }
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for(Player player : getServer().getOnlinePlayers()){
+                    if (player.hasPermission("timeditems.bypass")) {
+                        continue;
+                    }
+                    boolean needUpdate = false;
+                    boolean hasExpired = false;
+                    int rmvCounter = 0;
+                    List<ItemStack> newItems = new LinkedList<>();
+                    for (ItemStack item : player.getInventory().getContents()) {
+                        if (item != null && !item.getType().isAir() && isMMOItem(item)) {
+                            LiveMMOItem mmo = new LiveMMOItem(item);
+                            if(mmo.hasData(EXPIRY_PERIOD) && !mmo.hasData(EXPIRY_DATE)) {
+                                mmo.setData(EXPIRY_DATE, new DoubleData(System.currentTimeMillis() + ((DoubleData) mmo.getData(EXPIRY_PERIOD)).getValue() * 1000));
+                                newItems.add(mmo.newBuilder().build());
+                                needUpdate = true;
+                                continue;
+                            }
+                            if (getConfig().getBoolean("remove-expired-item") && mmo.hasData(EXPIRY_DATE) && ((DoubleData) mmo.getData(EXPIRY_DATE)).getValue() < System.currentTimeMillis()) {
+                                rmvCounter += item.getAmount();
+                                needUpdate = true;
+                                hasExpired = true;
+                                continue;
+                            }
+                        }
+                        newItems.add(item);
+                    }
+                    if (!needUpdate) return;
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void a(InventoryClickEvent event) {
-        if(event.getClickedInventory() != null &&
-                event.getResult() != Event.Result.DENY &&
-                event.getCurrentItem() != null && !event.getCurrentItem().getType().isAir() &&
-                !event.getWhoClicked().hasPermission("timeditems.bypass")) {
-            ItemStack item = applyExpiryDate(event.getCurrentItem());
-            if(item != null) {
-                event.setCurrentItem(item);
+                    int rm = rmvCounter;
+                    boolean u2 = hasExpired;
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            player.getInventory().setContents(newItems.toArray(new ItemStack[0]));
+                            player.updateInventory();
+                            if (u2) {
+                                String msg = Objects.requireNonNull(getConfig().getString("expired-item-removed", ""))
+                                        .replace("%amount%", Integer.toString(rm));
+                                player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+                                player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                            }
+                        }
+                    }.runTask(plugin);
+                }
             }
-        }
+        }.runTaskTimerAsynchronously(this, 0, 20L * getConfig().getInt("item-check-interval"));
     }
 
     public static boolean isMMOItem(ItemStack vanilla) {
         return io.lumine.mythic.lib.api.item.NBTItem.get(vanilla).hasType();
-    }
-
-    public static ItemStack applyExpiryDate(ItemStack itemStack) {
-        if(isMMOItem(itemStack)) {
-            LiveMMOItem mmo = new LiveMMOItem(itemStack);
-            if(mmo.hasData(EXPIRY_PERIOD) && !mmo.hasData(EXPIRY_DATE)) {
-                mmo.setData(EXPIRY_DATE, new DoubleData(System.currentTimeMillis() + ((DoubleData) mmo.getData(EXPIRY_PERIOD)).getValue() * 1000));
-                return mmo.newBuilder().build();
-            }
-        }
-        return null;
     }
 
     public String formatDuration(long seconds) {
