@@ -38,6 +38,9 @@ public class ExpiryDate extends DoubleStat implements ItemRestriction {
     public boolean canUse(RPGPlayer rpgPlayer, NBTItem nbtItem, boolean b) {
         double v = nbtItem.getDouble(getNBTPath());
         if(v > 0 && v < System.currentTimeMillis()) {
+            if (rpgPlayer.getPlayer().hasPermission("timeditems.bypass")) {
+                return true;
+            }
             String t = Objects.requireNonNull(TimedMMOItems.plugin.getConfig().getString("item-expired-placement", "action-bar"));
             String m = Objects.requireNonNull(TimedMMOItems.plugin.getConfig().getString("item-expired"));
             if(t.equalsIgnoreCase("action-bar")) {

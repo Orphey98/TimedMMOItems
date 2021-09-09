@@ -42,7 +42,8 @@ public final class TimedMMOItems extends JavaPlugin implements Listener {
     public void a(InventoryClickEvent event) {
         if(event.getClickedInventory() != null &&
                 event.getResult() != Event.Result.DENY &&
-                event.getCurrentItem() != null && !event.getCurrentItem().getType().isAir()) {
+                event.getCurrentItem() != null && !event.getCurrentItem().getType().isAir() &&
+                !event.getWhoClicked().hasPermission("timeditems.bypass")) {
             ItemStack item = applyExpiryDate(event.getCurrentItem());
             if(item != null) {
                 event.setCurrentItem(item);
