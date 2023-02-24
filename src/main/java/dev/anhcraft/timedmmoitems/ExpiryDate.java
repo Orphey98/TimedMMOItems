@@ -24,13 +24,13 @@ public class ExpiryDate extends DoubleStat implements ItemRestriction {
     }
 
     @Override
-    public void whenApplied(@NotNull ItemStackBuilder builder, @NotNull StatData statData) {
-        double val = ((DoubleData) statData).getValue();
+    public void whenApplied(@NotNull ItemStackBuilder item, @NotNull DoubleData data) {
+        double val = data.getValue();
         if (val > 0) {
             String date = TimedMMOItems.plugin.formatDate((long) val);
             String format = Objects.requireNonNull(TimedMMOItems.plugin.getConfig().getString("expiry-date-format"));
-            builder.getLore().insert(this.getPath(), format.replace("%value%", date));
-            builder.addItemTag(this.getAppliedNBT(statData));
+            item.getLore().insert(this.getPath(), format.replace("%value%", date));
+            item.addItemTag(this.getAppliedNBT(data));
         }
     }
 

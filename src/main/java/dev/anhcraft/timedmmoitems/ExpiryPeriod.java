@@ -19,13 +19,13 @@ public class ExpiryPeriod extends DoubleStat {
     }
 
     @Override
-    public void whenApplied(@NotNull ItemStackBuilder builder, @NotNull StatData statData) {
-        double val = ((DoubleData) statData).getValue();
+    public void whenApplied(@NotNull ItemStackBuilder item, @NotNull DoubleData data) {
+        double val = data.getValue();
         if (val > 0) {
             String period = TimedMMOItems.plugin.formatDuration((long) val);
             String format = Objects.requireNonNull(TimedMMOItems.plugin.getConfig().getString("expiry-period-format"));
-            builder.getLore().insert(this.getPath(), format.replace("%value%", period));
-            builder.addItemTag(this.getAppliedNBT(statData));
+            item.getLore().insert(this.getPath(), format.replace("%value%", period));
+            item.addItemTag(this.getAppliedNBT(data));
         }
     }
 }
