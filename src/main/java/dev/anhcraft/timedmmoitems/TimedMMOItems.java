@@ -38,15 +38,19 @@ public final class TimedMMOItems extends JavaPlugin {
                     if (player.hasPermission("timeditems.bypass")) {
                         continue;
                     }
+
                     boolean needUpdate = false;
-                    boolean hasExpired = false;
                     int rmvCounter = 0;
                     List<ItemStack> newItems = new LinkedList<>();
+
                     for (ItemStack item : player.getInventory().getContents()) {
                         if (item != null && !item.getType().isAir() && isMMOItem(item)) {
                             LiveMMOItem mmo = new LiveMMOItem(item);
                             if(mmo.hasData(EXPIRY_PERIOD) && !mmo.hasData(EXPIRY_DATE)) {
                                 mmo.setData(EXPIRY_DATE, new DoubleData(System.currentTimeMillis() + ((DoubleData) mmo.getData(EXPIRY_PERIOD)).getValue() * 1000));
+                                if (getConfig().getBoolean("replace-expiry-period")) {
+                                    mmo.removeData(EXPIRY_PERIOD);
+                                }
                                 newItems.add(mmo.newBuilder().build());
                                 needUpdate = true;
                                 continue;
@@ -54,32 +58,25 @@ public final class TimedMMOItems extends JavaPlugin {
                             if (getConfig().getBoolean("remove-expired-item") && mmo.hasData(EXPIRY_DATE) && ((DoubleData) mmo.getData(EXPIRY_DATE)).getValue() < System.currentTimeMillis()) {
                                 rmvCounter += item.getAmount();
                                 needUpdate = true;
-                                hasExpired = true;
                                 continue;
                             }
                         }
                         newItems.add(item);
                     }
-                    if (!needUpdate) return;
 
-                    int rm = rmvCounter;
-                    boolean u2 = hasExpired;
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            player.getInventory().setContents(newItems.toArray(new ItemStack[0]));
-                            player.updateInventory();
-                            if (u2) {
-                                String msg = Objects.requireNonNull(getConfig().getString("expired-item-removed", ""))
-                                        .replace("%amount%", Integer.toString(rm));
-                                player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
-                                player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
-                            }
-                        }
-                    }.runTask(plugin);
+                    if (!needUpdate) return;
+                    player.getInventory().setContents(newItems.toArray(new ItemStack[0]));
+                    player.updateInventory();
+
+                    if (rmvCounter > 0) {
+                        String msg = Objects.requireNonNull(getConfig().getString("expired-item-removed", ""))
+                                .replace("%amount%", Integer.toString(rmvCounter));
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+                        player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                    }
                 }
             }
-        }.runTaskTimerAsynchronously(this, 0, 20L * getConfig().getInt("item-check-interval"));
+        }.runTaskTimer(this, 0, 20L * getConfig().getInt("item-check-interval"));
 
         getServer().dispatchCommand(getServer().getConsoleSender(), "mi reload"); // force reload MMOItems
     }
@@ -92,11 +89,20 @@ public final class TimedMMOItems extends JavaPlugin {
         long days = seconds / DAY; seconds = Math.max(0, seconds - days * DAY);
         long hours = seconds / HOUR; seconds = Math.max(0, seconds - hours * HOUR);
         long minutes = seconds / MINUTE; seconds = Math.max(0, seconds - minutes * MINUTE);
+
         List<String> args = new ArrayList<>();
-        if(days > 0) args.add(String.format(Objects.requireNonNull(getConfig().getString("unit-format.day", "%d ngày")), days));
-        if(hours > 0) args.add(String.format(Objects.requireNonNull(getConfig().getString("unit-format.hour", "%d giờ")), hours));
-        if(minutes > 0) args.add(String.format(Objects.requireNonNull(getConfig().getString("unit-format.minute", "%d phút")), minutes));
-        if(seconds > 0) args.add(String.format(Objects.requireNonNull(getConfig().getString("unit-format.second", "%d giây")), seconds));
+        if(days == 1) args.add(String.format(Objects.requireNonNull(getConfig().getString("unit-format.day", "%d day")), days));
+        else if(days > 0) args.add(String.format(Objects.requireNonNull(getConfig().getString("unit-format.days", "%d days")), days));
+
+        if(hours == 1) args.add(String.format(Objects.requireNonNull(getConfig().getString("unit-format.hour", "%d hour")), hours));
+        else if(hours > 0) args.add(String.format(Objects.requireNonNull(getConfig().getString("unit-format.hours", "%d hours")), hours));
+
+        if(minutes == 1) args.add(String.format(Objects.requireNonNull(getConfig().getString("unit-format.minute", "%d minute")), minutes));
+        else if(minutes > 0) args.add(String.format(Objects.requireNonNull(getConfig().getString("unit-format.minutes", "%d minutes")), minutes));
+
+        if(seconds == 1) args.add(String.format(Objects.requireNonNull(getConfig().getString("unit-format.second", "%d second")), seconds));
+        else if(seconds > 0) args.add(String.format(Objects.requireNonNull(getConfig().getString("unit-format.seconds", "%d seconds")), seconds));
+
         return String.join(" ", args);
     }
 

@@ -1,12 +1,17 @@
-expiry-period-format: "&e&l[Thời hạn: %value%]"
-expiry-date-format: "&e&l[HSD: %value%]"
-item-expired: "&c&l[!] Vật phẩm đã hết hạn"
+expiry-period-format: "&e[Expiry Time: %value%]"
+expiry-date-format: "&e[Expiry Date: %value%]"
+item-expired: "&c&l[!] Item is expired"
 item-expired-placement: action-bar # action-bar, chat, off
 remove-expired-item: true
-expired-item-removed: "&cĐã xóa %amount% vật phẩm hết hạn"
+expired-item-removed: "&cRemoved %amount% expired items"
 unit-format:
-  second: "%d giây"
-  minute: "%d phút"
-  hour: "%d giờ"
-  day: "%d ngày"
-item-check-interval: 5
+  second: "%d second"
+  minute: "%d minute"
+  hour: "%d hour"
+  day: "%d day"
+  seconds: "%d seconds"
+  minutes: "%d minutes"
+  hours: "%d hours"
+  days: "%d days"
+item-check-interval: 5 # in seconds
+replace-expiry-period: true # replace instead of keeping both stats
