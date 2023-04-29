@@ -6,7 +6,7 @@
 
     <groupId>dev.anhcraft</groupId>
     <artifactId>TimedMMOItems</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <packaging>jar</packaging>
 
     <name>TimedMMOItems</name>
@@ -39,6 +39,12 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <relocations>
+                                <relocation>
+                                    <pattern>dev.anhcraft.config</pattern>
+                                    <shadedPattern>dev.anhcraft.timedmmoitems.lib.config</shadedPattern>
+                                </relocation>
+                            </relocations>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                         </configuration>
                     </execution>
@@ -55,8 +61,8 @@
 
     <repositories>
         <repository>
-            <id>papermc-repo</id>
-            <url>https://papermc.io/repo/repository/maven-public/</url>
+            <id>spigotmc-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
             <id>sonatype</id>
@@ -66,12 +72,16 @@
             <id>phoenix</id>
             <url>https://nexus.phoenixdevt.fr/repository/maven-public/</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
         <dependency>
-            <groupId>com.destroystokyo.paper</groupId>
-            <artifactId>paper-api</artifactId>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
             <version>1.14.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
@@ -92,6 +102,12 @@
             <artifactId>annotations</artifactId>
             <version>23.0.0</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.anhcraft.config</groupId>
+            <artifactId>config.bukkit</artifactId>
+            <version>v1.1.4</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
