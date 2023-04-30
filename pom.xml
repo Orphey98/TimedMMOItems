@@ -109,5 +109,11 @@
             <version>v1.1.4</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.anhcraft.config</groupId>
+            <artifactId>config.configdoc</artifactId>
+            <version>v1.1.4</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>
