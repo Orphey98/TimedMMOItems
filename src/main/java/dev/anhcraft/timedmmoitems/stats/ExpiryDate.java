@@ -5,7 +5,6 @@ import io.lumine.mythic.lib.api.item.NBTItem;
 import net.Indyuce.mmoitems.api.item.build.ItemStackBuilder;
 import net.Indyuce.mmoitems.api.player.RPGPlayer;
 import net.Indyuce.mmoitems.stat.data.DoubleData;
-import net.Indyuce.mmoitems.stat.data.type.StatData;
 import net.Indyuce.mmoitems.stat.type.DoubleStat;
 import net.Indyuce.mmoitems.stat.type.ItemRestriction;
 import net.md_5.bungee.api.ChatMessageType;
@@ -21,7 +20,7 @@ public class ExpiryDate extends DoubleStat implements ItemRestriction {
     public ExpiryDate() {
         super(
                 "EXPIRY_DATE", Material.PAINTING, "Expiry Date",
-                new String[]{"Defines the expiry date", "The value is in second(s) since Unix Epoch"},
+                new String[]{"Defines the expiry date", "The value is in milliseconds since Unix Epoch"},
                 new String[]{"!block", "all"}
         );
     }
