@@ -1,5 +1,6 @@
-package dev.anhcraft.timedmmoitems;
+package dev.anhcraft.timedmmoitems.stats;
 
+import dev.anhcraft.timedmmoitems.TimedMMOItems;
 import net.Indyuce.mmoitems.api.item.build.ItemStackBuilder;
 import net.Indyuce.mmoitems.stat.data.DoubleData;
 import net.Indyuce.mmoitems.stat.data.type.StatData;

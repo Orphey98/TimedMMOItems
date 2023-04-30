@@ -1,5 +1,6 @@
-package dev.anhcraft.timedmmoitems;
+package dev.anhcraft.timedmmoitems.stats;
 
+import dev.anhcraft.timedmmoitems.TimedMMOItems;
 import io.lumine.mythic.lib.api.item.NBTItem;
 import net.Indyuce.mmoitems.api.item.build.ItemStackBuilder;
 import net.Indyuce.mmoitems.api.player.RPGPlayer;
