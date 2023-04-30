@@ -2,7 +2,6 @@ package dev.anhcraft.timedmmoitems;
 
 import dev.anhcraft.config.bukkit.BukkitConfigProvider;
 import dev.anhcraft.config.bukkit.struct.YamlConfigSection;
-import dev.anhcraft.config.schema.ConfigSchema;
 import dev.anhcraft.config.schema.SchemaScanner;
 import dev.anhcraft.timedmmoitems.config.Config;
 import net.Indyuce.mmoitems.MMOItems;
@@ -10,7 +9,6 @@ import net.Indyuce.mmoitems.api.item.mmoitem.LiveMMOItem;
 import net.Indyuce.mmoitems.stat.data.DoubleData;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -27,9 +25,9 @@ public final class TimedMMOItems extends JavaPlugin {
     private static final long MINUTE = 60;
     public static final ExpiryPeriod EXPIRY_PERIOD = new ExpiryPeriod();
     public static final ExpiryDate EXPIRY_DATE = new ExpiryDate();
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
     public static TimedMMOItems plugin;
     public Config config;
+    public SimpleDateFormat dateFormat;
 
     @Override
     public void onEnable() {
@@ -108,6 +106,8 @@ public final class TimedMMOItems extends JavaPlugin {
                 throw new RuntimeException(e);
             }
         }
+
+        dateFormat = new SimpleDateFormat(config.dateFormat);
     }
 
     public static boolean isMMOItem(ItemStack vanilla) {
@@ -136,6 +136,6 @@ public final class TimedMMOItems extends JavaPlugin {
     }
 
     public String formatDate(long time) {
-        return DATE_FORMAT.format(new Date(time));
+        return dateFormat.format(new Date(time));
     }
 }

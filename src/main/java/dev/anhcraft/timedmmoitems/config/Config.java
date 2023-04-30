@@ -38,4 +38,8 @@ public class Config {
 
     @Description("Replace expiry period with expiry date instead of keeping both stats")
     public boolean replaceExpiryPeriod = true;
+
+    @Description("Date format")
+    @Validation(notNull = true, silent = true)
+    public String dateFormat = "dd/MM/yyyy";
 }
