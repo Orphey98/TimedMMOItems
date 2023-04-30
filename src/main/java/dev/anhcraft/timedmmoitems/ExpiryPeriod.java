@@ -23,7 +23,7 @@ public class ExpiryPeriod extends DoubleStat {
         double val = data.getValue();
         if (val > 0) {
             String period = TimedMMOItems.plugin.formatDuration((long) val);
-            String format = Objects.requireNonNull(TimedMMOItems.plugin.getConfig().getString("expiry-period-format"));
+            String format = Objects.requireNonNull(TimedMMOItems.plugin.config.expiryPeriodFormat);
             item.getLore().insert(this.getPath(), format.replace("%value%", period));
             item.addItemTag(this.getAppliedNBT(data));
         }

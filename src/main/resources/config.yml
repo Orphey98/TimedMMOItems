@@ -14,4 +14,4 @@ unit-format:
   hours: "%d hours"
   days: "%d days"
 item-check-interval: 5 # in seconds
-replace-expiry-period: true # replace instead of keeping both stats
+replace-expiry-period: true # replace expiry period with expiry date instead of keeping both stats

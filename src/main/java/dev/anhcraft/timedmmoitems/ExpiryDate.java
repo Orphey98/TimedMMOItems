@@ -7,6 +7,8 @@ import net.Indyuce.mmoitems.stat.data.DoubleData;
 import net.Indyuce.mmoitems.stat.data.type.StatData;
 import net.Indyuce.mmoitems.stat.type.DoubleStat;
 import net.Indyuce.mmoitems.stat.type.ItemRestriction;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -28,7 +30,7 @@ public class ExpiryDate extends DoubleStat implements ItemRestriction {
         double val = data.getValue();
         if (val > 0) {
             String date = TimedMMOItems.plugin.formatDate((long) val);
-            String format = Objects.requireNonNull(TimedMMOItems.plugin.getConfig().getString("expiry-date-format"));
+            String format = Objects.requireNonNull(TimedMMOItems.plugin.config.expiryDateFormat);
             item.getLore().insert(this.getPath(), format.replace("%value%", date));
             item.addItemTag(this.getAppliedNBT(data));
         }
@@ -41,12 +43,12 @@ public class ExpiryDate extends DoubleStat implements ItemRestriction {
             if (rpgPlayer.getPlayer().hasPermission("timeditems.bypass")) {
                 return true;
             }
-            String t = Objects.requireNonNull(TimedMMOItems.plugin.getConfig().getString("item-expired-placement", "action-bar"));
-            String m = Objects.requireNonNull(TimedMMOItems.plugin.getConfig().getString("item-expired"));
+            String t = TimedMMOItems.plugin.config.itemExpiredPlacement;
+            String m = ChatColor.translateAlternateColorCodes('&', TimedMMOItems.plugin.config.itemExpired);
             if(t.equalsIgnoreCase("action-bar")) {
-                rpgPlayer.getPlayer().sendActionBar('&', m);
+                rpgPlayer.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(m));
             } else if(t.equalsIgnoreCase("chat")) {
-                rpgPlayer.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', m));
+                rpgPlayer.getPlayer().sendMessage(m);
             }
             rpgPlayer.getPlayer().playSound(rpgPlayer.getPlayer().getLocation(), Sound.ITEM_SHIELD_BLOCK, 1, 1);
             return false;
