@@ -10,11 +10,14 @@ import net.Indyuce.mmoitems.api.item.mmoitem.LiveMMOItem;
 import net.Indyuce.mmoitems.stat.data.DoubleData;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -32,14 +35,7 @@ public final class TimedMMOItems extends JavaPlugin {
     public void onEnable() {
         plugin = this;
 
-        saveDefaultConfig();
-        reloadConfig();
-
-        try {
-            config = BukkitConfigProvider.YAML.createDeserializer().transformConfig(SchemaScanner.scanConfig(Config.class), new YamlConfigSection(getConfig()));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        initConfig();
 
         MMOItems.plugin.getStats().register(EXPIRY_PERIOD);
         MMOItems.plugin.getStats().register(EXPIRY_DATE);
@@ -91,6 +87,27 @@ public final class TimedMMOItems extends JavaPlugin {
         }.runTaskTimer(this, 0, 20L * config.itemCheckInterval);
 
         getServer().dispatchCommand(getServer().getConsoleSender(), "mi reload"); // force reload MMOItems
+    }
+
+    private void initConfig() {
+        getDataFolder().mkdir();
+        File f = new File(getDataFolder(), "config.yml");
+        if (f.exists()) {
+            try {
+                config = BukkitConfigProvider.YAML.createDeserializer().transformConfig(SchemaScanner.scanConfig(Config.class), new YamlConfigSection(getConfig()));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            config = new Config();
+            try {
+                YamlConfiguration c = new YamlConfiguration();
+                BukkitConfigProvider.YAML.createSerializer().transformConfig(SchemaScanner.scanConfig(Config.class), new YamlConfigSection(c), config);
+                c.save(f);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public static boolean isMMOItem(ItemStack vanilla) {
