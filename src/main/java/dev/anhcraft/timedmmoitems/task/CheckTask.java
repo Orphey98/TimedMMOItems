@@ -35,7 +35,7 @@ public class CheckTask extends BukkitRunnable {
             List<ItemStack> newItems = new LinkedList<>();
 
             for (ItemStack item : player.getInventory().getContents()) {
-                if (item != null && !item.getType().isAir() && NBTItem.get(item).hasType()) {
+                if (item != null && !item.getType().isAir() && NBTItem.get(item).getType() != null) {
                     LiveMMOItem mmo = new LiveMMOItem(item);
                     if(mmo.hasData(EXPIRY_PERIOD) && !mmo.hasData(EXPIRY_DATE)) {
                         mmo.setData(EXPIRY_DATE, new DoubleData(System.currentTimeMillis() + ((DoubleData) mmo.getData(EXPIRY_PERIOD)).getValue() * 1000));
