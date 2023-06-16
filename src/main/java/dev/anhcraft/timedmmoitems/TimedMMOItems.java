@@ -1,5 +1,6 @@
 package dev.anhcraft.timedmmoitems;
 
+import dev.anhcraft.config.bukkit.BukkitConfigDeserializer;
 import dev.anhcraft.config.bukkit.BukkitConfigProvider;
 import dev.anhcraft.config.bukkit.struct.YamlConfigSection;
 import dev.anhcraft.config.schema.SchemaScanner;
@@ -8,19 +9,15 @@ import dev.anhcraft.timedmmoitems.stats.ExpiryDate;
 import dev.anhcraft.timedmmoitems.stats.ExpiryPeriod;
 import dev.anhcraft.timedmmoitems.task.CheckTask;
 import net.Indyuce.mmoitems.MMOItems;
-import net.Indyuce.mmoitems.api.item.mmoitem.LiveMMOItem;
-import net.Indyuce.mmoitems.stat.data.DoubleData;
-import org.bukkit.ChatColor;
-import org.bukkit.Sound;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 public final class TimedMMOItems extends JavaPlugin {
     private static final long DAY = 60 * 60 * 24;
@@ -51,7 +48,7 @@ public final class TimedMMOItems extends JavaPlugin {
         File f = new File(getDataFolder(), "config.yml");
         if (f.exists()) {
             try {
-                config = BukkitConfigProvider.YAML.createDeserializer().transformConfig(SchemaScanner.scanConfig(Config.class), new YamlConfigSection(getConfig()));
+                config = new BukkitConfigDeserializer(BukkitConfigProvider.YAML).transformConfig(SchemaScanner.scanConfig(Config.class), new YamlConfigSection(getConfig()));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -59,7 +56,7 @@ public final class TimedMMOItems extends JavaPlugin {
             config = new Config();
             try {
                 YamlConfiguration c = new YamlConfiguration();
-                BukkitConfigProvider.YAML.createSerializer().transformConfig(SchemaScanner.scanConfig(Config.class), new YamlConfigSection(c), config);
+                new BukkitConfigDeserializer(BukkitConfigProvider.YAML).transformConfig(SchemaScanner.scanConfig(Config.class), new YamlConfigSection(c), config);
                 c.save(f);
             } catch (Exception e) {
                 throw new RuntimeException(e);
