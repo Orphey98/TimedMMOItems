@@ -2,6 +2,7 @@ package dev.anhcraft.timedmmoitems;
 
 import dev.anhcraft.config.bukkit.BukkitConfigDeserializer;
 import dev.anhcraft.config.bukkit.BukkitConfigProvider;
+import dev.anhcraft.config.bukkit.BukkitConfigSerializer;
 import dev.anhcraft.config.bukkit.struct.YamlConfigSection;
 import dev.anhcraft.config.schema.SchemaScanner;
 import dev.anhcraft.timedmmoitems.config.Config;
@@ -56,7 +57,7 @@ public final class TimedMMOItems extends JavaPlugin {
             config = new Config();
             try {
                 YamlConfiguration c = new YamlConfiguration();
-                new BukkitConfigDeserializer(BukkitConfigProvider.YAML).transformConfig(SchemaScanner.scanConfig(Config.class), new YamlConfigSection(c), config);
+                new BukkitConfigSerializer(BukkitConfigProvider.YAML).transformConfig(SchemaScanner.scanConfig(Config.class), new YamlConfigSection(c), config);
                 c.save(f);
             } catch (Exception e) {
                 throw new RuntimeException(e);

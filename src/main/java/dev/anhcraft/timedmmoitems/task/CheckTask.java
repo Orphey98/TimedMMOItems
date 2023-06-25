@@ -57,7 +57,8 @@ public class CheckTask extends BukkitRunnable {
 
             if (!needUpdate) return;
             player.getInventory().setContents(newItems.toArray(new ItemStack[0]));
-            player.updateInventory();
+
+            if (plugin.config.forceUpdateInventory) player.updateInventory();
 
             if (rmvCounter > 0) {
                 String msg = plugin.config.expiredItemRemoved.replace("%amount%", Integer.toString(rmvCounter));

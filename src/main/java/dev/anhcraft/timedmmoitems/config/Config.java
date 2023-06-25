@@ -42,4 +42,7 @@ public class Config {
     @Description("Date format")
     @Validation(notNull = true, silent = true)
     public String dateFormat = "dd/MM/yyyy";
+
+    @Description("Inventory update is usually handled automatically. Enable this if you experience glitch!")
+    public boolean forceUpdateInventory = false;
 }
