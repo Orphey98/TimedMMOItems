@@ -1,10 +1,12 @@
 package dev.anhcraft.timedmmoitems;
 
+import co.aikar.commands.PaperCommandManager;
 import dev.anhcraft.config.bukkit.BukkitConfigDeserializer;
 import dev.anhcraft.config.bukkit.BukkitConfigProvider;
 import dev.anhcraft.config.bukkit.BukkitConfigSerializer;
 import dev.anhcraft.config.bukkit.struct.YamlConfigSection;
 import dev.anhcraft.config.schema.SchemaScanner;
+import dev.anhcraft.timedmmoitems.cmd.MainCommand;
 import dev.anhcraft.timedmmoitems.config.Config;
 import dev.anhcraft.timedmmoitems.stats.ExpiryDate;
 import dev.anhcraft.timedmmoitems.stats.ExpiryPeriod;
@@ -42,9 +44,13 @@ public final class TimedMMOItems extends JavaPlugin {
         new CheckTask(this).runTaskTimer(this, 0, 20L * config.itemCheckInterval);
 
         getServer().dispatchCommand(getServer().getConsoleSender(), "mi reload"); // force reload MMOItems
+
+        PaperCommandManager pcm = new PaperCommandManager(this);
+        pcm.enableUnstableAPI("help");
+        pcm.registerCommand(new MainCommand());
     }
 
-    private void initConfig() {
+    public void initConfig() {
         getDataFolder().mkdir();
         File f = new File(getDataFolder(), "config.yml");
         if (f.exists()) {
