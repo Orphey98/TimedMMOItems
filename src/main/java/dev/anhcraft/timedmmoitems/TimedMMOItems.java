@@ -81,14 +81,14 @@ public final class TimedMMOItems extends JavaPlugin {
         if(days == 1) args.add(config.unitFormat.day.replace("%d", Long.toString(days)));
         else if(days > 0) args.add(config.unitFormat.days.replace("%d", Long.toString(days)));
 
-        if(hours == 1) args.add(config.unitFormat.hour.replace("%d", Long.toString(days)));
-        else if(hours > 0) args.add(config.unitFormat.hours.replace("%d", Long.toString(days)));
+        if(hours == 1) args.add(config.unitFormat.hour.replace("%d", Long.toString(hours)));
+        else if(hours > 0) args.add(config.unitFormat.hours.replace("%d", Long.toString(hours)));
 
-        if(minutes == 1) args.add(config.unitFormat.minute.replace("%d", Long.toString(days)));
-        else if(minutes > 0) args.add(config.unitFormat.minutes.replace("%d", Long.toString(days)));
+        if(minutes == 1) args.add(config.unitFormat.minute.replace("%d", Long.toString(minutes)));
+        else if(minutes > 0) args.add(config.unitFormat.minutes.replace("%d", Long.toString(minutes)));
 
-        if(seconds == 1) args.add(config.unitFormat.second.replace("%d", Long.toString(days)));
-        else if(seconds > 0) args.add(config.unitFormat.seconds.replace("%d", Long.toString(days)));
+        if(seconds == 1) args.add(config.unitFormat.second.replace("%d", Long.toString(seconds)));
+        else if(seconds > 0) args.add(config.unitFormat.seconds.replace("%d", Long.toString(seconds)));
 
         return String.join(" ", args);
     }
