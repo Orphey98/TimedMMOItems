@@ -20,7 +20,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 public final class TimedMMOItems extends JavaPlugin {
     private static final long DAY = 60 * 60 * 24;
@@ -79,17 +78,17 @@ public final class TimedMMOItems extends JavaPlugin {
         long minutes = seconds / MINUTE; seconds = Math.max(0, seconds - minutes * MINUTE);
 
         List<String> args = new ArrayList<>();
-        if(days == 1) args.add(String.format(Objects.requireNonNull(config.unitFormat.day), days));
-        else if(days > 0) args.add(String.format(Objects.requireNonNull(config.unitFormat.days), days));
+        if(days == 1) args.add(config.unitFormat.day.replace("%d", Long.toString(days)));
+        else if(days > 0) args.add(config.unitFormat.days.replace("%d", Long.toString(days)));
 
-        if(hours == 1) args.add(String.format(Objects.requireNonNull(config.unitFormat.hour), hours));
-        else if(hours > 0) args.add(String.format(Objects.requireNonNull(config.unitFormat.hours), hours));
+        if(hours == 1) args.add(config.unitFormat.hour.replace("%d", Long.toString(days)));
+        else if(hours > 0) args.add(config.unitFormat.hours.replace("%d", Long.toString(days)));
 
-        if(minutes == 1) args.add(String.format(Objects.requireNonNull(config.unitFormat.minute), minutes));
-        else if(minutes > 0) args.add(String.format(Objects.requireNonNull(config.unitFormat.minutes), minutes));
+        if(minutes == 1) args.add(config.unitFormat.minute.replace("%d", Long.toString(days)));
+        else if(minutes > 0) args.add(config.unitFormat.minutes.replace("%d", Long.toString(days)));
 
-        if(seconds == 1) args.add(String.format(Objects.requireNonNull(config.unitFormat.second), seconds));
-        else if(seconds > 0) args.add(String.format(Objects.requireNonNull(config.unitFormat.seconds), seconds));
+        if(seconds == 1) args.add(config.unitFormat.second.replace("%d", Long.toString(days)));
+        else if(seconds > 0) args.add(config.unitFormat.seconds.replace("%d", Long.toString(days)));
 
         return String.join(" ", args);
     }
