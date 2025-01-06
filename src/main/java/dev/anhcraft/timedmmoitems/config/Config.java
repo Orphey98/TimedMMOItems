@@ -16,11 +16,11 @@ public class Config {
     @Validation(notNull = true, silent = true)
     public String expiryDateFormat = "&e[Expiry Date: %value%]";
 
-    @Description("ItemConfig expired message")
+    @Description("Itemexpired message")
     @Validation(notNull = true, silent = true)
-    public String itemExpired = "&c&l[!] ItemConfig is expired";
+    public String itemExpired = "&c&l[!] Item is expired";
 
-    @Description("ItemConfig expired message placement")
+    @Description("Item expired message placement")
     @Validation(notNull = true, silent = true)
     public String itemExpiredPlacement = "action-bar";
 
@@ -39,7 +39,7 @@ public class Config {
     @Validation(notNull = true, silent = true)
     public UnitConfig unitFormat = new UnitConfig();
 
-    @Description("ItemConfig check interval in seconds")
+    @Description("Item check interval in seconds")
     public int itemCheckInterval = 5;
 
     @Description("Replace expiry period with expiry date instead of keeping both stats")
