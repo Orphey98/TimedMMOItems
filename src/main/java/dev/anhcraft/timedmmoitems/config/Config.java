@@ -16,7 +16,7 @@ public class Config {
     @Validation(notNull = true, silent = true)
     public String expiryDateFormat = "&e[Expiry Date: %value%]";
 
-    @Description("Itemexpired message")
+    @Description("Item expired message")
     @Validation(notNull = true, silent = true)
     public String itemExpired = "&c&l[!] Item is expired";
 
