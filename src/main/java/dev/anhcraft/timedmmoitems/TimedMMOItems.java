@@ -31,6 +31,7 @@ public final class TimedMMOItems extends JavaPlugin {
     public Config config;
     public SimpleDateFormat dateFormat;
 
+
     @Override
     public void onEnable() {
         plugin = this;
