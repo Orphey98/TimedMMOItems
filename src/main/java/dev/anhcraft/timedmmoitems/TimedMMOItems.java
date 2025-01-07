@@ -10,6 +10,7 @@ import dev.anhcraft.timedmmoitems.config.ItemConfig;
 import dev.anhcraft.timedmmoitems.stats.ExpiryDate;
 import dev.anhcraft.timedmmoitems.stats.ExpiryPeriod;
 import dev.anhcraft.timedmmoitems.task.CheckTask;
+import dev.anhcraft.timedmmoitems.util.ConfigHelper;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -17,7 +18,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import net.Indyuce.mmoitems.MMOItems;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -61,6 +61,8 @@ public final class TimedMMOItems extends JavaPlugin {
   public void initConfig() {
     getDataFolder().mkdir();
 
+    this.config = ConfigHelper.load(Config.class, requestConfig("config.yml").toPath());
+
     for (Map.Entry<String, List<ItemConfig>> entry : config.expiredItemReplace.entrySet()) {
       debug(
           2,
@@ -70,7 +72,7 @@ public final class TimedMMOItems extends JavaPlugin {
     }
   }
 
-  public YamlConfiguration requestConfig(String path) {
+  public File requestConfig(String path) {
     File f = new File(getDataFolder(), path);
     Preconditions.checkArgument(f.getParentFile().exists());
 
@@ -82,6 +84,6 @@ public final class TimedMMOItems extends JavaPlugin {
       }
     }
 
-    return YamlConfiguration.loadConfiguration(f);
+    return f;
   }
 }

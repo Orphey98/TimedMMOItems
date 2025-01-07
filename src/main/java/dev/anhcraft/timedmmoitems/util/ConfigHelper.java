@@ -4,7 +4,10 @@ import dev.anhcraft.config.ConfigFactory;
 import dev.anhcraft.config.Dictionary;
 import dev.anhcraft.config.NamingPolicy;
 import dev.anhcraft.config.SchemalessDictionary;
+import java.io.BufferedReader;
 import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -18,11 +21,17 @@ public class ConfigHelper {
   public static final Yaml YAML = new Yaml();
 
   @NotNull public static <T> T load(Class<T> clazz, Reader reader) {
+    Yaml yaml = new Yaml();
+    Map<String, Object> data = yaml.load(reader);
+    Dictionary dict = (Dictionary) normalize(data);
+    return (T) Objects.requireNonNull(FACTORY.getDenormalizer().denormalize(dict, clazz));
+  }
+
+  @NotNull public static <T> T load(Class<T> clazz, Path path) {
     try {
-      Yaml yaml = new Yaml();
-      Map<String, Object> data = yaml.load(reader);
-      Dictionary dict = (Dictionary) normalize(data);
-      return (T) Objects.requireNonNull(FACTORY.getDenormalizer().denormalize(dict, clazz));
+      try (BufferedReader reader = Files.newBufferedReader(path)) {
+        return load(clazz, reader);
+      }
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
