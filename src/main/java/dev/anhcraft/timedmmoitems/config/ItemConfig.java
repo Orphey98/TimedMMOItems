@@ -1,17 +1,14 @@
 package dev.anhcraft.timedmmoitems.config;
 
-import dev.anhcraft.config.annotations.Configurable;
-import dev.anhcraft.config.annotations.Validation;
+import dev.anhcraft.config.meta.Validate;
 
-@Configurable(keyNamingStyle = Configurable.NamingStyle.TRAIN_CASE)
 public class ItemConfig {
-  @Validation(notNull = true, silent = true)
+  @Validate(value = "not-null")
   public String type;
 
-  @Validation(notNull = true, silent = true)
+  @Validate(value = "not-null")
   public String id;
 
-  @Validation(notEmpty = true, silent = true)
   public int amount;
 
   public ItemConfig() {}

@@ -1,31 +1,21 @@
 package dev.anhcraft.timedmmoitems.config;
 
-import dev.anhcraft.config.annotations.Configurable;
-import dev.anhcraft.config.annotations.Validation;
+import dev.anhcraft.config.meta.Optional;
 
-@Configurable
 public class UnitConfig {
-  @Validation(notNull = true, silent = true)
-  public String second = "%d second";
+  @Optional public String second = "%d second";
 
-  @Validation(notNull = true, silent = true)
-  public String minute = "%d minute";
+  @Optional public String minute = "%d minute";
 
-  @Validation(notNull = true, silent = true)
-  public String hour = "%d hour";
+  @Optional public String hour = "%d hour";
 
-  @Validation(notNull = true, silent = true)
-  public String day = "%d day";
+  @Optional public String day = "%d day";
 
-  @Validation(notNull = true, silent = true)
-  public String seconds = "%d seconds";
+  @Optional public String seconds = "%d seconds";
 
-  @Validation(notNull = true, silent = true)
-  public String minutes = "%d minutes";
+  @Optional public String minutes = "%d minutes";
 
-  @Validation(notNull = true, silent = true)
-  public String hours = "%d hours";
+  @Optional public String hours = "%d hours";
 
-  @Validation(notNull = true, silent = true)
-  public String days = "%d days";
+  @Optional public String days = "%d days";
 }

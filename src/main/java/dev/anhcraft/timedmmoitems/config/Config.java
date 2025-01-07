@@ -1,72 +1,66 @@
 package dev.anhcraft.timedmmoitems.config;
 
-import dev.anhcraft.config.annotations.*;
-import dev.anhcraft.config.annotations.Optional;
+import dev.anhcraft.config.meta.*;
+import dev.anhcraft.config.meta.Optional;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-@Configurable(keyNamingStyle = Configurable.NamingStyle.TRAIN_CASE)
 public class Config {
   private static final long DAY = 60 * 60 * 24;
   private static final long HOUR = 60 * 60;
   private static final long MINUTE = 60;
 
-  @Description("Expiry period stat format")
-  @Validation(notNull = true, silent = true)
-  public String expiryPeriodFormat = "&e[Expiry Time: %value%]";
+  @Describe("Expiry period stat format")
+  public String expiryPeriodFormat;
 
-  @Description("Expiry date stat format")
-  @Validation(notNull = true, silent = true)
-  public String expiryDateFormat = "&e[Expiry Date: %value%]";
+  @Describe("Expiry date stat format")
+  public String expiryDateFormat;
 
-  @Description("Item expired message")
-  @Validation(notNull = true, silent = true)
-  public String itemExpired = "&c&l[!] Item is expired";
+  @Describe("Item expired message")
+  public String itemExpired;
 
-  @Description("Item expired message placement")
-  @Validation(notNull = true, silent = true)
-  public String itemExpiredPlacement = "action-bar";
+  @Describe("Item expired message placement")
+  public String itemExpiredPlacement;
 
-  @Description("Should remove expired item")
+  @Describe("Should remove expired item")
   public boolean removeExpiredItem = true;
 
-  @Description("Expired item removed message")
-  @Validation(notNull = true, silent = true)
-  public String expiredItemRemoved = "&cRemoved %amount% expired items";
+  @Describe("Expired item removed message")
+  public String expiredItemRemoved;
 
-  @Description("Replaced item dropped on the ground message")
-  @Validation(notNull = true, silent = true)
-  public String replacedItemDropped = "&c[!] Some items were dropped on the ground";
+  @Describe("Replaced item dropped on the ground message")
+  public String replacedItemDropped;
 
-  @Description("Unit format")
-  @Validation(notNull = true, silent = true)
+  @Describe("Unit format")
+  @Optional
   public UnitConfig unitFormat = new UnitConfig();
 
-  @Description("Item check interval in seconds")
+  @Describe("Item check interval in seconds")
   public int itemCheckInterval = 5;
 
-  @Description("Replace expiry period with expiry date instead of keeping both stats")
+  @Describe("Replace expiry period with expiry date instead of keeping both stats")
   public boolean replaceExpiryPeriod = true;
 
-  @Description("Date format")
-  @Validation(notNull = true, silent = true)
-  private String dateFormat = "dd/MM/yyyy";
+  @Describe("Date format")
+  private String dateFormat;
 
   @Exclude public SimpleDateFormat simpleDateFormat;
 
-  @Description(
+  @Describe(
       "Inventory update is usually handled automatically. Enable this if you experience glitch!")
   public boolean forceUpdateInventory = false;
 
-  @Description("Expired item change")
+  @Describe("Expired item change")
   @Optional
   public Map<String, List<ItemConfig>> expiredItemReplace = new HashMap<>();
 
-  @Description("Debug level")
+  @Describe("Debug level")
   public int debugLevel;
 
-  @PostHandler
-  private void init() {
+  @Denormalizer(
+      value = {"dateFormat"},
+      strategy = Denormalizer.Strategy.AFTER)
+  private void init(String dateFormat) {
     simpleDateFormat = new SimpleDateFormat(dateFormat);
   }
 

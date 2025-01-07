@@ -1,54 +1,52 @@
 package dev.anhcraft.timedmmoitems.util;
 
-import dev.anhcraft.config.ConfigDeserializer;
-import dev.anhcraft.config.ConfigSerializer;
-import dev.anhcraft.config.bukkit.BukkitConfigDeserializer;
-import dev.anhcraft.config.bukkit.BukkitConfigProvider;
-import dev.anhcraft.config.bukkit.BukkitConfigSerializer;
-import dev.anhcraft.config.bukkit.struct.YamlConfigSection;
-import dev.anhcraft.config.schema.SchemaScanner;
+import dev.anhcraft.config.ConfigFactory;
+import dev.anhcraft.config.Dictionary;
+import dev.anhcraft.config.NamingPolicy;
+import dev.anhcraft.config.SchemalessDictionary;
+import java.io.Reader;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
+import org.yaml.snakeyaml.Yaml;
 
+@SuppressWarnings("unchecked")
 public class ConfigHelper {
-  public static final ConfigSerializer SERIALIZER;
-  public static final ConfigDeserializer DESERIALIZER;
+  public static final ConfigFactory FACTORY =
+      ConfigFactory.create().useNamingPolicy(NamingPolicy.KEBAB_CASE).build();
+  public static final Yaml YAML = new Yaml();
 
-  static {
-    SERIALIZER = new BukkitConfigSerializer(BukkitConfigProvider.YAML);
-    DESERIALIZER = new BukkitConfigDeserializer(BukkitConfigProvider.YAML);
-  }
-
-  @NotNull public static <T> T load(Class<T> clazz, ConfigurationSection section) {
+  @NotNull public static <T> T load(Class<T> clazz, Reader reader) {
     try {
-      return DESERIALIZER.transformConfig(
-          Objects.requireNonNull(SchemaScanner.scanConfig(clazz)), new YamlConfigSection(section));
+      Yaml yaml = new Yaml();
+      Map<String, Object> data = yaml.load(reader);
+      Dictionary dict = (Dictionary) normalize(data);
+      return (T) Objects.requireNonNull(FACTORY.getDenormalizer().denormalize(dict, clazz));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }
 
-  public static <T> T load(Class<T> clazz, ConfigurationSection section, T dest) {
-    try {
-      return DESERIALIZER.transformConfig(
-          Objects.requireNonNull(SchemaScanner.scanConfig(clazz)),
-          new YamlConfigSection(section),
-          dest);
-    } catch (Exception e) {
-      e.printStackTrace();
-      return null;
-    }
-  }
+  private static Object normalize(Object val) {
+    if (val instanceof Map) {
+      Dictionary normalized = new SchemalessDictionary();
 
-  public static <T> void save(Class<T> clazz, ConfigurationSection section, T dest) {
-    try {
-      SERIALIZER.transformConfig(
-          Objects.requireNonNull(SchemaScanner.scanConfig(clazz)),
-          new YamlConfigSection(section),
-          dest);
-    } catch (Exception e) {
-      e.printStackTrace();
+      for (Map.Entry<?, ?> entry : ((Map<?, ?>) val).entrySet()) {
+        normalized.put(entry.getKey().toString(), normalize(entry.getValue()));
+      }
+
+      return normalized;
+
+    } else if (val instanceof List) {
+      List<?> list = (List<?>) val;
+      Object[] array = new Object[list.size()];
+      for (int i = 0; i < list.size(); i++) {
+        array[i] = normalize(list.get(i));
+      }
+      return array;
     }
+
+    return val;
   }
 }

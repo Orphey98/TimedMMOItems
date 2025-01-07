@@ -6,12 +6,15 @@ import dev.anhcraft.jvmkit.utils.FileUtil;
 import dev.anhcraft.jvmkit.utils.IOUtil;
 import dev.anhcraft.timedmmoitems.cmd.MainCommand;
 import dev.anhcraft.timedmmoitems.config.Config;
+import dev.anhcraft.timedmmoitems.config.ItemConfig;
 import dev.anhcraft.timedmmoitems.stats.ExpiryDate;
 import dev.anhcraft.timedmmoitems.stats.ExpiryPeriod;
 import dev.anhcraft.timedmmoitems.task.CheckTask;
-import dev.anhcraft.timedmmoitems.util.ConfigHelper;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import net.Indyuce.mmoitems.MMOItems;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -57,7 +60,14 @@ public final class TimedMMOItems extends JavaPlugin {
 
   public void initConfig() {
     getDataFolder().mkdir();
-    config = ConfigHelper.load(Config.class, requestConfig("config.yml"));
+
+    for (Map.Entry<String, List<ItemConfig>> entry : config.expiredItemReplace.entrySet()) {
+      debug(
+          2,
+          "Replace MMO item %s => %s",
+          entry.getKey(),
+          entry.getValue().stream().map(ItemConfig::toString).collect(Collectors.joining(", ")));
+    }
   }
 
   public YamlConfiguration requestConfig(String path) {
