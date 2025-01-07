@@ -45,6 +45,10 @@
                                     <shadedPattern>dev.anhcraft.timedmmoitems.lib.config</shadedPattern>
                                 </relocation>
                                 <relocation>
+                                    <pattern>dev.anhcraft.jvmkit</pattern>
+                                    <shadedPattern>dev.anhcraft.timedmmoitems.lib.jvmkit</shadedPattern>
+                                </relocation>
+                                <relocation>
                                     <pattern>co.aikar.commands</pattern>
                                     <shadedPattern>dev.anhcraft.timedmmoitems.lib.acf</shadedPattern>
                                 </relocation>
@@ -114,6 +118,12 @@
             <artifactId>annotations</artifactId>
             <version>23.0.0</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.anhcraft</groupId>
+            <artifactId>JvmKit</artifactId>
+            <version>v1.1.5</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.github.anhcraft.config</groupId>
