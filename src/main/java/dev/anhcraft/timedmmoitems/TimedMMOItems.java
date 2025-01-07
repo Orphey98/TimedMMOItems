@@ -35,7 +35,7 @@ public final class TimedMMOItems extends JavaPlugin {
     if (config != null && config.debugLevel >= level) {
       getServer()
           .getConsoleSender()
-          .sendMessage(ChatColor.GOLD + "[Vouchers#DEBUG] " + String.format(format, args));
+          .sendMessage(ChatColor.GOLD + "[TimedMMOItems#DEBUG] " + String.format(format, args));
     }
   }
 
