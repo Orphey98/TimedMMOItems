@@ -6,11 +6,11 @@ import dev.anhcraft.config.annotations.Validation;
 @Configurable(keyNamingStyle = Configurable.NamingStyle.TRAIN_CASE)
 public class ItemConfig {
     @Validation(notNull = true, silent = true)
-    public String type = "bukkit";
+    public String type;
     @Validation(notNull = true, silent = true)
-    public String id = "air";
+    public String id;
     @Validation(notEmpty = true, silent = true)
-    public int amount = 1;
+    public int amount;
 
     public ItemConfig() {
     }

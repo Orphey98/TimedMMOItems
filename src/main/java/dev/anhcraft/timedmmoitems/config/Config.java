@@ -2,6 +2,7 @@ package dev.anhcraft.timedmmoitems.config;
 
 import dev.anhcraft.config.annotations.Configurable;
 import dev.anhcraft.config.annotations.Description;
+import dev.anhcraft.config.annotations.Optional;
 import dev.anhcraft.config.annotations.Validation;
 
 import java.util.*;
@@ -53,10 +54,6 @@ public class Config {
     public boolean forceUpdateInventory = false;
 
     @Description("Expired item change")
-    @Validation(notNull = true, silent = true)
-    public Map<String, List<ItemConfig>> expiredItemReplace = new HashMap<>() {{
-        put("DRAGON_HELMET", Arrays.asList(new ItemConfig("bukkit", "stone", 2), new ItemConfig("bukkit", "egg", 128)));
-        put("DRAGON_CHESTPLATE", Arrays.asList(new ItemConfig("bukkit", "oak_log", 2), new ItemConfig("ARMOR", "STEEL_CHESTPLATE", 1)));
-        put("DRAGON_LEGGINGS", Arrays.asList(new ItemConfig("bukkit", "gold_blog", 1), new ItemConfig("armor", "STEEL_LEGGINGS", 1)));
-    }};
+    @Optional
+    public Map<String, List<ItemConfig>> expiredItemReplace = new HashMap<>();
 }

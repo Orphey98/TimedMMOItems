@@ -1,21 +1,26 @@
 package dev.anhcraft.timedmmoitems;
 
 import co.aikar.commands.PaperCommandManager;
+import com.google.common.base.Preconditions;
 import dev.anhcraft.config.bukkit.BukkitConfigDeserializer;
 import dev.anhcraft.config.bukkit.BukkitConfigProvider;
 import dev.anhcraft.config.bukkit.BukkitConfigSerializer;
 import dev.anhcraft.config.bukkit.struct.YamlConfigSection;
 import dev.anhcraft.config.schema.SchemaScanner;
+import dev.anhcraft.jvmkit.utils.FileUtil;
+import dev.anhcraft.jvmkit.utils.IOUtil;
 import dev.anhcraft.timedmmoitems.cmd.MainCommand;
 import dev.anhcraft.timedmmoitems.config.Config;
 import dev.anhcraft.timedmmoitems.stats.ExpiryDate;
 import dev.anhcraft.timedmmoitems.stats.ExpiryPeriod;
 import dev.anhcraft.timedmmoitems.task.CheckTask;
+import dev.anhcraft.timedmmoitems.util.ConfigHelper;
 import net.Indyuce.mmoitems.MMOItems;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,7 +35,6 @@ public final class TimedMMOItems extends JavaPlugin {
     public static TimedMMOItems plugin;
     public Config config;
     public SimpleDateFormat dateFormat;
-
 
     @Override
     public void onEnable() {
@@ -52,24 +56,7 @@ public final class TimedMMOItems extends JavaPlugin {
 
     public void initConfig() {
         getDataFolder().mkdir();
-        File f = new File(getDataFolder(), "config.yml");
-        if (f.exists()) {
-            try {
-                config = new BukkitConfigDeserializer(BukkitConfigProvider.YAML).transformConfig(SchemaScanner.scanConfig(Config.class), new YamlConfigSection(getConfig()));
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            config = new Config();
-            try {
-                YamlConfiguration c = new YamlConfiguration();
-                new BukkitConfigSerializer(BukkitConfigProvider.YAML).transformConfig(SchemaScanner.scanConfig(Config.class), new YamlConfigSection(c), config);
-                c.save(f);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-
+        config = ConfigHelper.load(Config.class, requestConfig("config.yml"));
         dateFormat = new SimpleDateFormat(config.dateFormat);
     }
 
@@ -96,5 +83,20 @@ public final class TimedMMOItems extends JavaPlugin {
 
     public String formatDate(long time) {
         return dateFormat.format(new Date(time));
+    }
+
+    public YamlConfiguration requestConfig(String path) {
+        File f = new File(getDataFolder(), path);
+        Preconditions.checkArgument(f.getParentFile().exists());
+
+        if (!f.exists()) {
+            try {
+                FileUtil.write(f, IOUtil.readResource(TimedMMOItems.class, "/config/" + path));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return YamlConfiguration.loadConfiguration(f);
     }
 }
