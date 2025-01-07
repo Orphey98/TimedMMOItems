@@ -1,0 +1,42 @@
+expiry-period-format: '&e[Expiry Time: %value%]'
+expiry-date-format: '&e[Expiry Date: %value%]'
+item-expired: '&c&l[!] Item is expired'
+item-expired-placement: action-bar
+remove-expired-item: true
+expired-item-removed: '&cRemoved %amount% expired items'
+replaced-item-dropped: '&c[!] Some items were dropped on the ground'
+unit-format:
+  second: '%d second'
+  minute: '%d minute'
+  hour: '%d hour'
+  day: '%d day'
+  seconds: '%d seconds'
+  minutes: '%d minutes'
+  hours: '%d hours'
+  days: '%d days'
+item-check-interval: 5
+replace-expiry-period: true
+date-format: dd/MM/yyyy
+force-update-inventory: false
+expired-item-replace:
+  DRAGON_HELMET:
+    - type: bukkit
+      id: stone
+      amount: 2
+    - type: bukkit
+      id: egg
+      amount: 128
+  DRAGON_LEGGINGS:
+    - type: bukkit
+      id: gold_blog
+      amount: 1
+    - type: armor
+      id: STEEL_LEGGINGS
+      amount: 1
+  DRAGON_CHESTPLATE:
+    - type: bukkit
+      id: oak_log
+      amount: 2
+    - type: ARMOR
+      id: STEEL_CHESTPLATE
+      amount: 1

@@ -24,14 +24,14 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>9</source>
+                    <target>9</target>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.3.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -43,6 +43,10 @@
                                 <relocation>
                                     <pattern>dev.anhcraft.config</pattern>
                                     <shadedPattern>dev.anhcraft.timedmmoitems.lib.config</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>dev.anhcraft.jvmkit</pattern>
+                                    <shadedPattern>dev.anhcraft.timedmmoitems.lib.jvmkit</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>co.aikar.commands</pattern>
@@ -84,6 +88,10 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <repository>
+            <id>aikar</id>
+            <url>https://repo.aikar.co/content/groups/aikar/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -112,15 +120,21 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>com.github.anhcraft</groupId>
+            <artifactId>JvmKit</artifactId>
+            <version>v1.1.5</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>com.github.anhcraft.config</groupId>
             <artifactId>config.bukkit</artifactId>
-            <version>v1.1.7</version>
+            <version>v1.2.5</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.github.anhcraft.config</groupId>
             <artifactId>config.configdoc</artifactId>
-            <version>v1.1.7</version>
+            <version>v1.2.5</version>
             <scope>test</scope>
         </dependency>
         <dependency>

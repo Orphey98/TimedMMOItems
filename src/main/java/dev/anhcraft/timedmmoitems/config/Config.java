@@ -2,7 +2,10 @@ package dev.anhcraft.timedmmoitems.config;
 
 import dev.anhcraft.config.annotations.Configurable;
 import dev.anhcraft.config.annotations.Description;
+import dev.anhcraft.config.annotations.Optional;
 import dev.anhcraft.config.annotations.Validation;
+
+import java.util.*;
 
 @Configurable(keyNamingStyle = Configurable.NamingStyle.TRAIN_CASE)
 public class Config {
@@ -29,6 +32,10 @@ public class Config {
     @Validation(notNull = true, silent = true)
     public String expiredItemRemoved = "&cRemoved %amount% expired items";
 
+    @Description("Replaced item dropped on the ground message")
+    @Validation(notNull = true, silent = true)
+    public String replacedItemDropped = "&c[!] Some items were dropped on the ground";
+
     @Description("Unit format")
     @Validation(notNull = true, silent = true)
     public UnitConfig unitFormat = new UnitConfig();
@@ -45,4 +52,8 @@ public class Config {
 
     @Description("Inventory update is usually handled automatically. Enable this if you experience glitch!")
     public boolean forceUpdateInventory = false;
+
+    @Description("Expired item change")
+    @Optional
+    public Map<String, List<ItemConfig>> expiredItemReplace = new HashMap<>();
 }
