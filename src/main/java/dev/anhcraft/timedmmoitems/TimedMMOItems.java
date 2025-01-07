@@ -16,8 +16,10 @@ import dev.anhcraft.timedmmoitems.stats.ExpiryPeriod;
 import dev.anhcraft.timedmmoitems.task.CheckTask;
 import dev.anhcraft.timedmmoitems.util.ConfigHelper;
 import net.Indyuce.mmoitems.MMOItems;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +33,16 @@ public final class TimedMMOItems extends JavaPlugin {
     public static final ExpiryDate EXPIRY_DATE = new ExpiryDate();
     public static TimedMMOItems plugin;
     public Config config;
+
+    public void debug(@NotNull String format, @NotNull Object... args) {
+        debug(1, format, args);
+    }
+
+    public void debug(int level, @NotNull String format, @NotNull Object... args) {
+        if (config != null && config.debugLevel >= level) {
+            getServer().getConsoleSender().sendMessage(ChatColor.GOLD + "[Vouchers#DEBUG] " + String.format(format, args));
+        }
+    }
 
     @Override
     public void onEnable() {

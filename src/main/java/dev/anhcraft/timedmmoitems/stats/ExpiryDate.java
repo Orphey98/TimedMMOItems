@@ -42,6 +42,7 @@ public class ExpiryDate extends DoubleStat implements ItemRestriction {
         double v = nbtItem.getDouble(getNBTPath());
         if(v > 0 && v < System.currentTimeMillis()) {
             if (rpgPlayer.getPlayer().hasPermission("timeditems.bypass")) {
+                TimedMMOItems.plugin.debug(2, "%s skips expired-item block via permission", rpgPlayer.getPlayer().getName());
                 return true;
             }
             String t = TimedMMOItems.plugin.config.itemExpiredPlacement;

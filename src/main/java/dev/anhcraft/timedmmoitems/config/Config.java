@@ -63,6 +63,9 @@ public class Config {
     @Optional
     public Map<String, List<ItemConfig>> expiredItemReplace = new HashMap<>();
 
+    @Description("Debug level")
+    public int debugLevel;
+
     @PostHandler
     private void init() {
         simpleDateFormat = new SimpleDateFormat(dateFormat);
