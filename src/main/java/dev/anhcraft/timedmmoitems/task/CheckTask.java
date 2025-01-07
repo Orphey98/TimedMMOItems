@@ -43,7 +43,7 @@ public class CheckTask extends BukkitRunnable {
       List<ItemStack> newItems = new LinkedList<>();
 
       for (ItemStack item : player.getInventory().getContents()) {
-        if (item == null || item.getType().isAir() || NBTItem.get(item).getType() == null) {
+        if (item == null || item.getType().isAir() || !item.hasItemMeta() || NBTItem.get(item).getType() == null) {
           newItems.add(item);
           continue;
         }
