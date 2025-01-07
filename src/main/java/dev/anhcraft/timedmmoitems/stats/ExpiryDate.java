@@ -14,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Date;
 import java.util.Objects;
 
 public class ExpiryDate extends DoubleStat implements ItemRestriction {
@@ -29,7 +30,7 @@ public class ExpiryDate extends DoubleStat implements ItemRestriction {
     public void whenApplied(@NotNull ItemStackBuilder item, @NotNull DoubleData data) {
         double val = data.getValue();
         if (val > 0) {
-            String date = TimedMMOItems.plugin.formatDate((long) val);
+            String date = TimedMMOItems.plugin.config.formatDate(new Date((long) val));
             String format = Objects.requireNonNull(TimedMMOItems.plugin.config.expiryDateFormat);
             item.getLore().insert(this.getPath(), format.replace("%value%", date));
             item.addItemTag(this.getAppliedNBT(data));
