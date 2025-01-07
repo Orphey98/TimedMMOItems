@@ -10,16 +10,16 @@ import org.bukkit.command.CommandSender;
 @CommandAlias("ti|tmi|timeditems|timedmmoitems")
 public class MainCommand extends BaseCommand {
 
-    @HelpCommand
-    @CatchUnknown
-    public void doHelp(CommandSender sender, CommandHelp help) {
-        help.showHelp();
-    }
+  @HelpCommand
+  @CatchUnknown
+  public void doHelp(CommandSender sender, CommandHelp help) {
+    help.showHelp();
+  }
 
-    @Subcommand("reload")
-    @CommandPermission("timedmmoitems.reload")
-    public void reload(CommandSender sender) {
-        TimedMMOItems.plugin.initConfig();
-        sender.sendMessage(ChatColor.GREEN + "TimedMMOItems reloaded!");
-    }
+  @Subcommand("reload")
+  @CommandPermission("timedmmoitems.reload")
+  public void reload(CommandSender sender) {
+    TimedMMOItems.plugin.initConfig();
+    sender.sendMessage(ChatColor.GREEN + "TimedMMOItems reloaded!");
+  }
 }

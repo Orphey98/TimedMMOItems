@@ -1,8 +1,15 @@
 package dev.anhcraft.timedmmoitems.task;
 
+import static dev.anhcraft.timedmmoitems.TimedMMOItems.EXPIRY_DATE;
+import static dev.anhcraft.timedmmoitems.TimedMMOItems.EXPIRY_PERIOD;
+
 import dev.anhcraft.timedmmoitems.TimedMMOItems;
 import dev.anhcraft.timedmmoitems.config.ItemConfig;
 import io.lumine.mythic.lib.api.item.NBTItem;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import net.Indyuce.mmoitems.api.item.mmoitem.LiveMMOItem;
 import net.Indyuce.mmoitems.stat.data.DoubleData;
 import org.bukkit.ChatColor;
@@ -10,14 +17,6 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import static dev.anhcraft.timedmmoitems.TimedMMOItems.EXPIRY_DATE;
-import static dev.anhcraft.timedmmoitems.TimedMMOItems.EXPIRY_PERIOD;
 
 public class CheckTask extends BukkitRunnable {
   private final TimedMMOItems plugin;
@@ -43,7 +42,10 @@ public class CheckTask extends BukkitRunnable {
       List<ItemStack> newItems = new LinkedList<>();
 
       for (ItemStack item : player.getInventory().getContents()) {
-        if (item == null || item.getType().isAir() || !item.hasItemMeta() || NBTItem.get(item).getType() == null) {
+        if (item == null
+            || item.getType().isAir()
+            || !item.hasItemMeta()
+            || NBTItem.get(item).getType() == null) {
           newItems.add(item);
           continue;
         }
@@ -51,16 +53,27 @@ public class CheckTask extends BukkitRunnable {
         LiveMMOItem mmo = new LiveMMOItem(item);
 
         if (mmo.hasData(EXPIRY_PERIOD) && !mmo.hasData(EXPIRY_DATE)) {
-            double expiryPeriod = ((DoubleData) mmo.getData(EXPIRY_PERIOD)).getValue();
+          double expiryPeriod = ((DoubleData) mmo.getData(EXPIRY_PERIOD)).getValue();
           double expiryDate = System.currentTimeMillis();
           expiryDate += expiryPeriod * 1000d;
           mmo.setData(EXPIRY_DATE, new DoubleData(expiryDate));
 
           if (plugin.config.replaceExpiryPeriod) {
             mmo.removeData(EXPIRY_PERIOD);
-            TimedMMOItems.plugin.debug(1, "%s item has EXPIRY_PERIOD(%.1f) but no EXPIRY_DATE => Create EXPIRY_DATE(%.1f), and remove EXPIRY_PERIOD", player.getName(), expiryPeriod, expiryDate);
+            TimedMMOItems.plugin.debug(
+                1,
+                "%s item has EXPIRY_PERIOD(%.1f) but no EXPIRY_DATE => Create EXPIRY_DATE(%.1f),"
+                    + " and remove EXPIRY_PERIOD",
+                player.getName(),
+                expiryPeriod,
+                expiryDate);
           } else {
-            TimedMMOItems.plugin.debug(1, "%s item has EXPIRY_PERIOD(%.1f) but no EXPIRY_DATE => Create EXPIRY_DATE(%.1f)", player.getName(), expiryPeriod, expiryDate);
+            TimedMMOItems.plugin.debug(
+                1,
+                "%s item has EXPIRY_PERIOD(%.1f) but no EXPIRY_DATE => Create EXPIRY_DATE(%.1f)",
+                player.getName(),
+                expiryPeriod,
+                expiryDate);
           }
 
           newItems.add(mmo.newBuilder().build());
@@ -68,7 +81,9 @@ public class CheckTask extends BukkitRunnable {
           continue;
         }
 
-        if (plugin.config.removeExpiredItem && mmo.hasData(EXPIRY_DATE) && ((DoubleData) mmo.getData(EXPIRY_DATE)).getValue() < System.currentTimeMillis()) {
+        if (plugin.config.removeExpiredItem
+            && mmo.hasData(EXPIRY_DATE)
+            && ((DoubleData) mmo.getData(EXPIRY_DATE)).getValue() < System.currentTimeMillis()) {
           rmvCounter += item.getAmount();
           needUpdate = true;
           if (plugin.config.expiredItemReplace.containsKey(mmo.getId())) {
@@ -86,7 +101,8 @@ public class CheckTask extends BukkitRunnable {
 
       if (rmvCounter > 0) {
         if (needReplace) itemReplace(player, rplMap);
-        String msg = plugin.config.expiredItemRemoved.replace("%amount%", Integer.toString(rmvCounter));
+        String msg =
+            plugin.config.expiredItemRemoved.replace("%amount%", Integer.toString(rmvCounter));
         player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
       }
