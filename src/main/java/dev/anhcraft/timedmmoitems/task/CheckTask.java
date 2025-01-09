@@ -27,7 +27,7 @@ public class CheckTask extends BukkitRunnable {
   @Override
   public void run() {
     for (Player player : plugin.getServer().getOnlinePlayers()) {
-      if (player.hasPermission("timeditems.bypass")) {
+      if (plugin.config.enableBypassPermission && player.hasPermission("timeditems.bypass")) {
         continue;
       }
 
