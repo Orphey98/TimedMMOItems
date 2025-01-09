@@ -49,7 +49,7 @@ public class CheckTask extends BukkitRunnable {
       for (ItemStack item : player.getInventory().getContents()) {
         if (item == null
             || item.getType().isAir()
-            || !item.hasItemMeta()
+            //|| !item.hasItemMeta() // custom NBT tag might not create ItemMeta
             || NBTItem.get(item).getType() == null) {
           newItems.add(item);
           continue;
