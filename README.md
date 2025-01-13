@@ -1,9 +1,21 @@
 # TimedMMOItems
 
-Added stats for making expirable MMOItems stuff 
-- Expiry Period: how long is the item usable (in seconds)
-- Expiry Date: the deadline for item (in seconds, since Unix Epoch)
+## Features
 
-You should only care the first stat which is Expiry Period. All items will be automatically checked and the second stat will be added when necessary.
+## Download
 
-Bypass permission: *timeditems.bypass*
+- Spigot: https://www.spigotmc.org/resources/timedmmoitems.109230/
+- Polymart: https://polymart.org/resource/timedmmoitems.4283
+- Modrinth: https://modrinth.com/plugin/timedmmoitems
+
+## Community
+
+Join my support server: https://discord.gg/HRAEKapRwx
+
+## API
+
+None
+
+## License
+
+TimedMMOItems is licensed under GNU General Public License v3.0
